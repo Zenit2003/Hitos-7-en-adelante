@@ -18,6 +18,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 //LoginActivity
 
@@ -28,9 +30,12 @@ public class MainActivity extends AppCompatActivity {
     private EditText et_password;
     private Button btn_login;
     private Button btn_register;
+    private Button btn_borrar;
 
-
+    private FirebaseDatabase mDB = FirebaseDatabase.getInstance();
     private FirebaseAuth mAuth;
+    private DatabaseReference mDataRef = mDB.getReference();
+    private LeerEscribir database;
 
     @Override
     public void onStart() {
@@ -51,13 +56,15 @@ public class MainActivity extends AppCompatActivity {
         et_password = findViewById(R.id.et_password);
         btn_login = findViewById(R.id.btn_login);
         btn_register = findViewById(R.id.btn_register);
+        btn_borrar = findViewById(R.id.btn_borrar);
+
 
         mAuth = FirebaseAuth.getInstance();
+        database = new LeerEscribir(mDataRef);
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 String email, password;
 
                 email = et_correo.getText().toString();
@@ -74,6 +81,13 @@ public class MainActivity extends AppCompatActivity {
 
                 startActivity(new Intent(MainActivity.this, RegisterActivity.class));
 
+            }
+        });
+
+        btn_borrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                database.borrar();
             }
         });
 
